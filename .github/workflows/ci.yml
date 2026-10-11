@@ -1,0 +1,17 @@
+name: ci
+on:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  dbt-build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v5
+      - run: uv sync
+      - name: Load 2025 into a local DuckDB
+        run: uv run python -m pipeline.cli --target dev --seasons 2025
+      - name: dbt build (local DuckDB)
+        working-directory: dbt
+        run: uv run dbt build --profiles-dir . --target dev

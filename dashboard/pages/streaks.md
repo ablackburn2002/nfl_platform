@@ -23,8 +23,21 @@ where season = ${inputs.season.value} and stat = '${inputs.stat.value}' and hit_
 order by games_played desc, player_name
 ```
 
-<BigValue data={every} value=player_name agg=count title="Players" />
-<DataTable data={every} rows=50 />
+```sql every_count
+select count(*) as n from nfl.player_streaks
+where season = ${inputs.season.value} and stat = '${inputs.stat.value}' and hit_every_game and games_played >= 3
+```
+
+<BigValue data={every_count} value=n fmt=num0 title="Players who hit it in every game (min 3 games)" />
+
+<DataTable data={every} rows=50>
+  <Column id=player_name title="Player" />
+  <Column id=position title="Pos" />
+  <Column id=team title="Team" />
+  <Column id=games_played title="Games" />
+  <Column id=longest_streak title="Longest streak" />
+  <Column id=current_streak title="Current streak" />
+</DataTable>
 
 ## Longest active streaks
 
@@ -35,4 +48,12 @@ where season = ${inputs.season.value} and stat = '${inputs.stat.value}' and curr
 order by current_streak desc limit 25
 ```
 
-<DataTable data={active} />
+<DataTable data={active} rows=25>
+  <Column id=player_name title="Player" />
+  <Column id=position title="Pos" />
+  <Column id=team title="Team" />
+  <Column id=games_played title="Games" />
+  <Column id=games_hit title="Games hit" />
+  <Column id=current_streak title="Current" contentType=colorscale />
+  <Column id=longest_streak title="Longest" />
+</DataTable>

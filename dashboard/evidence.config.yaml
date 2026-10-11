@@ -1,5 +1,5 @@
 deployment:
-  basePath: ""
+  basePath: /nfl_platform
 plugins:
   components:
     "@evidence-dev/core-components": {}

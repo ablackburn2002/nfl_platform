@@ -39,15 +39,22 @@ order by net_epa_play desc
 
 ## Offense vs defense
 
-<ScatterPlot data={standings} x=off_epa_play y=def_epa_play series=team xAxisTitle="Offense EPA/play" yAxisTitle="Defense EPA/play allowed (lower is better)" yMin=-0.3 />
+<ScatterPlot data={standings} x=off_epa_play y=def_epa_play xAxisTitle="Offense EPA/play (higher is better)" yAxisTitle="Defense EPA/play allowed (lower is better)" tooltipTitle=team legend=false />
 
 ## Rolling form (4-game net EPA/play)
 
-```sql form
-select week, team, net_epa_play_l4 from nfl.team_game_efficiency where season = ${inputs.season.value} order by week
+```sql team_list
+select distinct team from nfl.team_game_efficiency where season = ${inputs.season.value} order by team
 ```
 
-<LineChart data={form} x=week y=net_epa_play_l4 series=team />
+<Dropdown name=team_pick data={team_list} value=team title="Team" defaultValue="KC" />
+
+```sql form
+select week, team, net_epa_play_l4 from nfl.team_game_efficiency
+where season = ${inputs.season.value} and team = '${inputs.team_pick.value}' order by week
+```
+
+<LineChart data={form} x=week y=net_epa_play_l4 yFmt=num3 title="Rolling 4-game net EPA/play" />
 
 ## Strength of schedule
 
@@ -55,11 +62,7 @@ select week, team, net_epa_play_l4 from nfl.team_game_efficiency where season = 
 select team, avg_opp_win_pct, avg_opp_net_epa from nfl.team_sos where season = ${inputs.season.value} order by avg_opp_win_pct desc
 ```
 
-<DataTable data={sos} rows=32>
-  <Column id=team />
-  <Column id=avg_opp_win_pct fmt=pct1 contentType=colorscale />
-  <Column id=avg_opp_net_epa fmt=num3 />
-</DataTable>
+<BarChart data={sos} x=team y=avg_opp_win_pct swapXY=true sort=false yFmt=pct0 title="Average opponent win % (hardest schedule first)" chartAreaHeight=700 />
 
 ## Betting: results against the spread
 
@@ -70,7 +73,7 @@ from nfl.team_game_results where season = ${inputs.season.value} and game_type =
 group by team order by covers desc
 ```
 
-<BarChart data={ats} x=team y=covers swapXY=true />
+<BarChart data={ats} x=team y=covers swapXY=true sort=false title="Games covering the spread" chartAreaHeight=700 />
 
 ## Team streaks
 

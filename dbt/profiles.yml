@@ -1,0 +1,11 @@
+nfl:
+  target: dev
+  outputs:
+    dev:
+      type: duckdb
+      path: ../warehouse/nfl.duckdb
+      threads: 4
+    prod:
+      type: duckdb
+      path: "md:nfl"
+      threads: 4

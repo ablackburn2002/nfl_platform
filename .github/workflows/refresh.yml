@@ -1,0 +1,62 @@
+name: refresh
+on:
+  schedule:
+    - cron: "0 20 * 1,2,9-12 2"   # Tue 20:00 UTC = Wed ~07:00 AEDT
+    - cron: "0 20 * 1,2,9-12 5"   # Fri 20:00 UTC = Sat ~07:00 AEDT
+    - cron: "0 20 1 3-8 *"        # monthly off-season
+    # - cron: "0 20 * 1,2,9-12 6" # optional Sun ~07:00 AEDT: Friday final injury report
+  workflow_dispatch:
+    inputs:
+      seasons: {description: "e.g. 2026, 2024,2025 or 1999-2025", default: "2026"}
+      datasets: {description: "table names or all", default: "all"}
+      full_refresh: {description: "ignore load log", type: boolean, default: false}
+
+concurrency: {group: refresh, cancel-in-progress: false}
+permissions: {contents: write, pages: write, id-token: write}
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    environment: {name: github-pages, url: "${{ steps.deploy.outputs.page_url }}"}
+    env:
+      MOTHERDUCK_TOKEN: ${{ secrets.MOTHERDUCK_TOKEN }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v5
+        with: {enable-cache: true}
+      - run: uv sync --frozen
+      - name: Load raw data (failures are isolated per dataset and logged to ops.load_errors)
+        id: load
+        continue-on-error: true
+        run: |
+          uv run python -m pipeline.cli --target prod \
+            --seasons "${{ inputs.seasons || '2026' }}" \
+            --datasets "${{ inputs.datasets || 'all' }}" \
+            ${{ inputs.full_refresh && '--full-refresh' || '' }} | tee -a "$GITHUB_STEP_SUMMARY"
+          exit ${PIPESTATUS[0]}
+      - name: Transform and test
+        working-directory: dbt
+        run: uv run dbt build --target prod --profiles-dir .
+      - name: Export marts for dashboard
+        run: uv run python -m pipeline.export_marts --target prod
+      - uses: actions/setup-node@v4
+        with: {node-version: 22}
+      - name: Build dashboard
+        working-directory: dashboard
+        run: |
+          npm install --no-audit --no-fund --legacy-peer-deps
+          npm run sources
+          npm run build
+      - uses: actions/upload-pages-artifact@v3
+        with: {path: dashboard/build}
+      - id: deploy
+        uses: actions/deploy-pages@v4
+      - name: Keep schedule alive
+        run: |
+          date -u +%FT%TZ > .heartbeat
+          git config user.name "github-actions"; git config user.email "actions@github.com"
+          git add .heartbeat && git commit -m "heartbeat" && git push || true
+      - name: Fail run if any dataset failed to load
+        if: steps.load.outcome == 'failure'
+        run: exit 1

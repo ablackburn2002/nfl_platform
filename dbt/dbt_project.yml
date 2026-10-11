@@ -1,0 +1,9 @@
+name: nfl
+version: "1.0"
+profile: nfl
+model-paths: ["models"]
+seed-paths: ["seeds"]
+models:
+  nfl:
+    staging: {+materialized: view, +schema: staging}
+    marts: {+materialized: table, +schema: marts}

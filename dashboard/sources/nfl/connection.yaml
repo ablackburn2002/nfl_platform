@@ -1,0 +1,4 @@
+name: nfl
+type: duckdb
+options:
+  filename: nfl.duckdb

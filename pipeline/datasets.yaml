@@ -1,0 +1,33 @@
+# tag: release tag on nflverse/nflverse-data
+# files: asset basename patterns; {season} is substituted for season datasets
+# partition: season (delete+insert per season) | full (replace)
+datasets:
+  - {table: pbp, tag: pbp, files: ["play_by_play_{season}"], partition: season}
+  - {table: pbp_participation, tag: pbp_participation, files: ["pbp_participation_{season}"], partition: season}
+  - {table: stats_player_week, tag: stats_player, files: ["stats_player_week_{season}"], partition: season}
+  - {table: stats_player_reg, tag: stats_player, files: ["stats_player_reg_{season}"], partition: season}
+  - {table: stats_team_week, tag: stats_team, files: ["stats_team_week_{season}"], partition: season}
+  - {table: stats_team_reg, tag: stats_team, files: ["stats_team_reg_{season}"], partition: season}
+  - {table: injuries, tag: injuries, files: ["injuries_{season}"], partition: season}
+  - {table: rosters, tag: rosters, files: ["roster_{season}"], partition: season}
+  - {table: rosters_weekly, tag: weekly_rosters, files: ["roster_weekly_{season}"], partition: season}
+  - {table: depth_charts, tag: depth_charts, files: ["depth_charts_{season}"], partition: season}
+  - {table: snap_counts, tag: snap_counts, files: ["snap_counts_{season}"], partition: season}
+  - {table: advstats_week_pass, tag: pfr_advstats, files: ["advstats_week_pass_{season}"], partition: season}
+  - {table: advstats_week_rush, tag: pfr_advstats, files: ["advstats_week_rush_{season}"], partition: season}
+  - {table: advstats_week_rec, tag: pfr_advstats, files: ["advstats_week_rec_{season}"], partition: season}
+  - {table: advstats_week_def, tag: pfr_advstats, files: ["advstats_week_def_{season}"], partition: season}
+  - {table: ftn_charting, tag: ftn_charting, files: ["ftn_charting_{season}"], partition: season}
+  - {table: ngs_passing, tag: nextgen_stats, files: ["ngs_passing"], partition: full}
+  - {table: ngs_receiving, tag: nextgen_stats, files: ["ngs_receiving"], partition: full}
+  - {table: ngs_rushing, tag: nextgen_stats, files: ["ngs_rushing"], partition: full}
+  - {table: qbr_week, tag: espn_data, files: ["qbr_week_level"], partition: full}
+  - {table: qbr_season, tag: espn_data, files: ["qbr_season_level"], partition: full}
+  - {table: games, tag: schedules, files: ["games"], partition: full}
+  - {table: players, tag: players, files: ["players"], partition: full}
+  - {table: teams, tag: teams, files: ["teams_colors_logos"], partition: full}
+  - {table: officials, tag: officials, files: ["officials"], partition: full}
+  - {table: trades, tag: trades, files: ["trades"], partition: full}
+  - {table: draft_picks, tag: draft_picks, files: ["draft_picks"], partition: full}
+  - {table: combine, tag: combine, files: ["combine"], partition: full}
+  - {table: contracts, tag: contracts, files: ["historical_contracts"], partition: full}

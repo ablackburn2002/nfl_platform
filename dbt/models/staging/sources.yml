@@ -1,0 +1,37 @@
+version: 2
+sources:
+  - name: raw
+    schema: raw
+    tables:
+      - {name: pbp}
+      - {name: stats_player_week}
+      - {name: stats_team_week}
+      - {name: injuries}
+      - {name: snap_counts}
+      - {name: advstats_week_pass}
+      - {name: depth_charts}
+      - {name: ngs_passing}
+      - {name: ngs_receiving}
+      - {name: ngs_rushing}
+      - {name: qbr_week}
+      - {name: games}
+      - {name: players}
+      - {name: teams}
+models:
+  - name: stg_player_week
+    columns:
+      - {name: player_id, tests: [not_null]}
+      - {name: game_id, tests: [not_null]}
+  - name: stg_pbp
+    columns:
+      - {name: game_id, tests: [not_null]}
+      - {name: play_id, tests: [not_null]}
+  - name: stg_games
+    columns:
+      - {name: game_id, tests: [not_null, unique]}
+  - name: stg_teams
+    columns:
+      - {name: team_abbr, tests: [not_null, unique]}
+  - name: stg_players
+    columns:
+      - {name: gsis_id, tests: [not_null, unique]}

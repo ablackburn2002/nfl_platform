@@ -1,0 +1,4 @@
+node_modules/
+.evidence/
+build/
+sources/nfl/nfl.duckdb

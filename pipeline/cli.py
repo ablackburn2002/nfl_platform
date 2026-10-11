@@ -44,7 +44,7 @@ def release_stamp(tag):
 
 def connect(target):
     if target == "prod":
-        con = duckdb.connect("md:nfl")
+        con = duckdb.connect("md:nfl_platform")
     else:
         (ROOT / "warehouse").mkdir(exist_ok=True)
         con = duckdb.connect(str(ROOT / "warehouse" / "nfl.duckdb"))

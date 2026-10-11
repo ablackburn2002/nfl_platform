@@ -16,7 +16,7 @@ Season data is replaced per asset, so stat corrections overwrite cleanly. Add hi
 1. Create a public GitHub repo from this folder and a free MotherDuck account; create database `nfl`.
 2. Add repo secret `MOTHERDUCK_TOKEN`.
 3. `.github/workflows/refresh.yml` runs Wed ~07:00 and Sat ~07:00 AEDT (Sep-Feb), monthly off-season, or manually (Actions > refresh > Run workflow, with `seasons` for backfills).
-4. Query in the MotherDuck UI, or locally: `duckdb md:nfl`.
+4. Query in the MotherDuck UI, or locally: `duckdb md:nfl_platform`.
 
 ## Models
 - `marts.mart_player_streaks`: threshold streaks (edit rules in the model), incl. `hit_every_game`

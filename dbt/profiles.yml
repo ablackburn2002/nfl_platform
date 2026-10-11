@@ -7,5 +7,5 @@ nfl:
       threads: 4
     prod:
       type: duckdb
-      path: "md:nfl"
+      path: "md:nfl_platform"
       threads: 4

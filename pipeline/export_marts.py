@@ -9,7 +9,7 @@ app = typer.Typer(add_completion=False)
 
 @app.command()
 def export(target: str = "dev"):
-    src = "md:nfl" if target == "prod" else str(ROOT / "warehouse" / "nfl.duckdb")
+    src = "md:nfl_platform" if target == "prod" else str(ROOT / "warehouse" / "nfl.duckdb")
     out = ROOT / "dashboard" / "sources" / "nfl" / "nfl.duckdb"
     out.unlink(missing_ok=True)
     con = duckdb.connect(str(out))

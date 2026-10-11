@@ -26,6 +26,8 @@ jobs:
       - uses: astral-sh/setup-uv@v5
         with: {enable-cache: true}
       - run: uv sync --frozen
+      - name: Ensure MotherDuck database exists
+        run: uv run python -c "import duckdb; c=duckdb.connect('md:'); c.execute('create database if not exists nfl_platform'); print(c.sql('show databases'))"
       - name: Load raw data (failures are isolated per dataset and logged to ops.load_errors)
         id: load
         continue-on-error: true

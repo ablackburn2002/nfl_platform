@@ -44,6 +44,9 @@ def release_stamp(tag):
 
 def connect(target):
     if target == "prod":
+        boot = duckdb.connect("md:")
+        boot.execute("create database if not exists nfl_platform")
+        boot.close()
         con = duckdb.connect("md:nfl_platform")
     else:
         (ROOT / "warehouse").mkdir(exist_ok=True)

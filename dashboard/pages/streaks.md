@@ -30,7 +30,7 @@ where season = ${inputs.season.value} and stat = '${inputs.stat.value}' and hit_
 
 <BigValue data={every_count} value=n fmt=num0 title="Players who hit it in every game (min 3 games)" />
 
-<DataTable data={every} rows=50>
+<DataTable data={every} rows=50 emptySet=pass emptyMessage="No player has hit this threshold in every game.">
   <Column id=player_name title="Player" />
   <Column id=position title="Pos" />
   <Column id=team title="Team" />
@@ -48,7 +48,7 @@ where season = ${inputs.season.value} and stat = '${inputs.stat.value}' and curr
 order by current_streak desc limit 25
 ```
 
-<DataTable data={active} rows=25>
+<DataTable data={active} rows=25 emptySet=pass emptyMessage="No active streaks for this threshold.">
   <Column id=player_name title="Player" />
   <Column id=position title="Pos" />
   <Column id=team title="Team" />

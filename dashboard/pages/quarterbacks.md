@@ -16,25 +16,25 @@ where season = ${inputs.season.value} and dropbacks >= 100
 order by epa_dropback desc
 ```
 
-<DataTable data={qbs} rows=40 search=true>
-  <Column id=player_name />
-  <Column id=team />
-  <Column id=dropbacks />
-  <Column id=epa_dropback fmt=num3 contentType=colorscale />
-  <Column id=cpoe fmt=num1 />
-  <Column id=success_rate fmt=pct1 />
-  <Column id=avg_time_to_throw fmt=num2 title="Time to throw" />
-  <Column id=aggressiveness fmt=num1 />
+<DataTable data={qbs} rows=40 search=true wrapTitles=true compact=true>
+  <Column id=player_name title="QB" />
+  <Column id=team title="Team" />
+  <Column id=dropbacks title="Dropbacks" />
+  <Column id=epa_dropback fmt=num3 contentType=colorscale title="EPA/db" />
+  <Column id=cpoe fmt=num1 title="CPOE" />
+  <Column id=success_rate fmt=pct1 title="Success" />
+  <Column id=avg_time_to_throw fmt=num2 title="TTT" />
+  <Column id=aggressiveness fmt=num1 title="Aggr %" />
   <Column id=avg_qbr fmt=num1 title="QBR" />
-  <Column id=pressure_pct fmt=num1 title="Pressure %" />
-  <Column id=sacks />
+  <Column id=pressure_pct fmt=num1 title="Press %" />
+  <Column id=sacks title="Sacks" />
   <Column id=interceptions title="INT" />
 </DataTable>
 
 ## EPA per dropback vs CPOE
 
-<ScatterPlot data={qbs} x=cpoe y=epa_dropback series=player_name />
+<ScatterPlot data={qbs} x=cpoe y=epa_dropback tooltipTitle=player_name legend=false xAxisTitle="CPOE" yAxisTitle="EPA per dropback" />
 
 ## Time to throw vs aggressiveness
 
-<ScatterPlot data={qbs} x=avg_time_to_throw y=aggressiveness series=player_name />
+<ScatterPlot data={qbs} x=avg_time_to_throw y=aggressiveness tooltipTitle=player_name legend=false xAxisTitle="Avg time to throw (s)" yAxisTitle="Aggressiveness %" />

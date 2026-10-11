@@ -29,7 +29,7 @@ select team, score_state, sum(plays) as plays, sum(pass_rate_over_expected * pla
 from nfl.play_tendencies where season = ${inputs.season.value} group by team, score_state having sum(plays) > 20
 ```
 
-<Heatmap data={proe} x=score_state y=team value=pass_rate_over_expected valueFmt=pct1 />
+<Heatmap data={proe} x=score_state y=team value=pass_rate_over_expected valueFmt=pct1 title="Pass rate over expected" />
 
 ## Fourth-down aggressiveness
 
@@ -40,14 +40,14 @@ select team, sum(fourth_downs) as fourth_downs, sum(went_for_it) as went_for_it,
 from nfl.fourth_down where season = ${inputs.season.value} group by team order by go_rate desc
 ```
 
-<BarChart data={fd} x=team y=go_rate yFmt=pct0 sort=false />
+<BarChart data={fd} x=team y=go_rate yFmt=pct0 sort=false swapXY=true chartAreaHeight=700 title="4th-down go-for-it rate by team" />
 
 ```sql fd_zone
 select distance_bucket, field_zone, sum(fourth_downs) as fourth_downs, sum(went_for_it) * 1.0 / sum(fourth_downs) as go_rate
 from nfl.fourth_down where season = ${inputs.season.value} group by all
 ```
 
-<Heatmap data={fd_zone} x=distance_bucket y=field_zone value=go_rate valueFmt=pct0 />
+<Heatmap data={fd_zone} x=distance_bucket y=field_zone value=go_rate valueFmt=pct0 title="Go-for-it rate by distance and field zone" />
 
 ## Red zone and third down
 

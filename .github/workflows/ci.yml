@@ -6,12 +6,44 @@ on:
 jobs:
   dbt-build:
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     steps:
       - uses: actions/checkout@v4
       - uses: astral-sh/setup-uv@v5
-      - run: uv sync
+        with: {enable-cache: true}
+      - run: uv sync --frozen
       - name: Load 2025 into a local DuckDB
         run: uv run python -m pipeline.cli --target dev --seasons 2025
       - name: dbt build (local DuckDB)
         working-directory: dbt
         run: uv run dbt build --profiles-dir . --target dev
+      - name: Export marts for the dashboard
+        run: uv run python -m pipeline.export_marts
+      - uses: actions/upload-artifact@v4
+        with:
+          name: dashboard-marts
+          path: dashboard/sources/nfl/nfl.duckdb
+
+  dashboard:
+    needs: dbt-build
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          name: dashboard-marts
+          path: dashboard/sources/nfl
+      - uses: actions/setup-node@v4
+        with: {node-version: 22}
+      - name: Build dashboard
+        working-directory: dashboard
+        run: |
+          npm install --no-audit --no-fund
+          npm run sources
+          npm run build
+      - name: Smoke test every page in a real browser
+        working-directory: dashboard
+        run: |
+          npx playwright install --with-deps chromium
+          node tests/smoke.mjs

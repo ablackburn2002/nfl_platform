@@ -22,5 +22,14 @@ Season data is replaced per asset, so stat corrections overwrite cleanly. Add hi
 - `marts.mart_player_streaks`: threshold streaks (edit rules in the model), incl. `hit_every_game`
 - `marts.mart_season_leaders`: top 25 per stat per season
 
-## Not yet built
-More staging/core/marts (injuries, snaps, NGS, team efficiency), Evidence dashboard, CI workflow.
+## Built
+- Loader with retries, transactional loads, bad-file rejection and an error log (`ops.load_errors`).
+- dbt staging + 19 marts (team, player, league, play-by-play, injuries, depth charts).
+- Evidence dashboard in `dashboard/` (deployed to GitHub Pages by `refresh.yml`).
+- Scheduled refresh: Wed and Sat ~07:00 AEDT in-season, monthly off-season; manual run via Actions > Run workflow.
+
+## Backfill history
+Run the workflow manually with `seasons=1999-2025` once the 2026 run succeeds.
+
+## Still to do
+Notebooks, extra marts (FTN, officials, draft/contracts), PR CI workflow.

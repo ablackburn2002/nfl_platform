@@ -18,7 +18,8 @@ order by case report_status when 'Out' then 1 when 'Doubtful' then 2 else 3 end,
 ```sql burden
 select team, sum(out_or_doubtful) as out_or_doubtful, sum(questionable) as questionable
 from nfl.injury_burden
-where (season, week) = (select season, max(week) from nfl.injury_burden where season = (select max(season) from nfl.injury_burden) group by season)
+where season = (select max(season) from nfl.injury_burden)
+  and week = (select max(week) from nfl.injury_burden where season = (select max(season) from nfl.injury_burden))
 group by team order by out_or_doubtful desc
 ```
 

@@ -38,19 +38,19 @@ order by position, fantasy_pos_rank
 
 ## Receiver efficiency (play-by-play)
 
-```sql wr
+```sql rec_eff
 select player_name, team, targets, receptions, catch_rate, avg_depth_of_target, avg_yac, epa_per_target, tds
 from nfl.receiver_pbp where season = ${inputs.season.value} and targets >= 20 order by epa_per_target desc
 ```
 
-<DataTable data={wr} rows=25 search=true />
-<ScatterPlot data={wr} x=avg_depth_of_target y=epa_per_target series=player_name />
+<DataTable data={rec_eff} rows=25 search=true />
+<ScatterPlot data={rec_eff} x=avg_depth_of_target y=epa_per_target series=player_name />
 
 ## Rushing efficiency (play-by-play)
 
-```sql rb
+```sql rush_eff
 select player_name, team, carries, yards, ypc, epa_per_carry, success_rate, explosive_rate, tds
 from nfl.rusher_pbp where season = ${inputs.season.value} and carries >= 20 order by epa_per_carry desc
 ```
 
-<DataTable data={rb} rows=25 search=true />
+<DataTable data={rush_eff} rows=25 search=true />
